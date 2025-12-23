@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muscle Memory | A Psychological Thriller by Vedant J.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Oswald:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <button class="nav-toggle" aria-label="Toggle Navigation">
+        <span class="hamburger"></span>
+    </button>
+
+    <nav class="nav-overlay">
+        <div class="nav-content">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="#hero" class="nav-link">Home <span class="nav-number">01</span></a></li>
+                <li class="nav-item"><a href="#cover" class="nav-link">The Book <span class="nav-number">02</span></a>
+                </li>
+                <li class="nav-item"><a href="#about" class="nav-link">About the Story <span
+                            class="nav-number">03</span></a></li>
+                <li class="nav-item"><a href="#author" class="nav-link">Author’s Note <span
+                            class="nav-number">04</span></a></li>
+                <li class="nav-item"><a href="#buy-links" class="nav-link">Where to Buy <span
+                            class="nav-number">05</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Mystery Background Layer -->
+    <div class="mystery-layer">
+        <!-- Symbol 1: Cipher Ring (Rotating) -->
+        <svg class="mystery-symbol cipher-ring" viewBox="0 0 500 500">
+            <circle cx="250" cy="250" r="240" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="10 5"
+                opacity="0.3" />
+            <circle cx="250" cy="250" r="200" fill="none" stroke="currentColor" stroke-width="1"
+                stroke-dasharray="40 10" />
+            <path d="M250,10 L250,490 M10,250 L490,250" stroke="currentColor" stroke-width="1" opacity="0.2" />
+            <!-- Pseudo-text Ring -->
+            <path id="ringPath" d="M 250, 250 m -220, 0 a 220,220 0 1,1 440,0 a 220,220 0 1,1 -440,0" fill="none" />
+            <text fill="currentColor" opacity="0.4" font-size="14" letter-spacing="10">
+                <textPath href="#ringPath">
+                    X VII IV III IX V II VI I X VII IV III IX V II VI I X VII IV III IX V II VI I
+                </textPath>
+            </text>
+        </svg>
+
+        <!-- Symbol 2: Geometric Lines -->
+        <svg class="mystery-symbol geometry-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <line x1="0" y1="0" x2="100" y2="100" stroke="currentColor" stroke-width="0.5" opacity="0.2" />
+            <line x1="100" y1="0" x2="0" y2="100" stroke="currentColor" stroke-width="0.5" opacity="0.2" />
+            <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.1" />
+        </svg>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <p class="presenter">VEDANT J. PRESENTS</p>
+                <h1 class="book-title">MUSCLE MEMORY</h1>
+                <p class="tagline">“One body. Two histories. No truth left.”</p>
+                <div class="hero-actions">
+                    <a href="#buy-links" class="magnetic-button" data-text-original="Buy the Book"
+                        data-text-hover="Enter the Story">
+                        <span class="btn-text">Buy the Book</span>
+                        <span class="btn-fill"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="scroll-container">
+                <span class="scroll-text">Scroll to Reveal</span>
+                <div class="scroll-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
+                    </svg>
+                </div>
+            </div>
+            <!-- Sigil 1: Mercury Alchemical Sign (Hero) -->
+            <svg class="ancient-sigil sigil-hero" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="25" stroke-width="0.8" />
+                <path d="M35 25 Q50 10 65 25" stroke-width="0.8" /> <!-- Horns -->
+                <line x1="50" y1="75" x2="50" y2="95" stroke-width="0.8" /> <!-- Cross base -->
+                <line x1="40" y1="85" x2="60" y2="85" stroke-width="0.8" />
+                <circle cx="50" cy="50" r="45" stroke-width="0.3" stroke-dasharray="2 4" opacity="0.4" />
+            </svg>
+
+            <!-- Sigil 5: Air Alchemical Sign (Hero Left) -->
+            <svg class="ancient-sigil sigil-hero-left" viewBox="0 0 100 100">
+                <path d="M50 15 L85 75 L15 75 Z" stroke-width="0.8" /> <!-- Triangle -->
+                <line x1="25" y1="35" x2="75" y2="35" stroke-width="0.8" /> <!-- Cross bar -->
+            </svg>
+        </section>
+
+        <!-- Book Cover Section -->
+        <section id="cover" class="cover-section">
+            <div class="cover-container">
+                <img src="book-cover.jpg" alt="Muscle Memory Book Cover" class="book-cover-img">
+
+                <!-- Sigil 2: Sulfur Alchemical Sign (Book) -->
+                <svg class="ancient-sigil sigil-book" viewBox="0 0 100 100">
+                    <path d="M50 15 L80 55 L20 55 Z" stroke-width="0.8" /> <!-- Triangle -->
+                    <line x1="50" y1="55" x2="50" y2="90" stroke-width="0.8" /> <!-- Cross base -->
+                    <line x1="35" y1="75" x2="65" y2="75" stroke-width="0.8" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <div class="content-wrapper" style="position: relative;">
+                <h2>The Story</h2>
+                <p>Memory is a liar. It reshapes the past to fit the person we’ve become. But what happens when the body
+                    remembers something the mind has wiped clean? When every scar tells a story that doesn't match the
+                    life you recall living.</p>
+                <p>In this gripping psychological thriller, the line between identity and delusion blurs until it
+                    vanishes completely. Truth isn't found in what you remember—it's hidden in what you can't forget.
+                </p>
+
+                <!-- Sigil 4: Salt Alchemical Sign (About) -->
+                <svg class="ancient-sigil sigil-about" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="35" stroke-width="0.8" />
+                    <line x1="15" y1="50" x2="85" y2="50" stroke-width="0.8" />
+                    <rect x="10" y="10" width="80" height="80" stroke-width="0.2" opacity="0.3" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- Author Note Section -->
+        <section id="author" class="author-section">
+            <div class="content-wrapper">
+                <h2>A Note from the Author</h2>
+                <div class="author-note" style="position: relative;">
+                    <p>Writing this book was an exploration of the terrifying fragility of self. We assume we are the
+                        sum of our memories, but biological reality suggests otherwise. I wanted to explore that
+                        disconnect—the horror of discovering a stranger within your own skin.</p>
+                    <p class="signature">— Vedant J.</p>
+
+                    <!-- Sigil 6: Water Alchemical Sign (Author) -->
+                    <svg class="ancient-sigil sigil-author" viewBox="0 0 100 100">
+                        <path d="M50 85 L15 25 L85 25 Z" stroke-width="0.8" /> <!-- Downward Triangle -->
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Buy Links Section -->
+        <section id="buy-links" class="buy-section">
+            <div class="content-wrapper">
+                <h2>Where to Buy</h2>
+                <div class="buy-buttons">
+                    <button class="store-btn" disabled>Amazon</button>
+                    <button class="store-btn" disabled>Flipkart</button>
+                    <button class="store-btn" disabled>Kindle</button>
+                </div>
+                <p class="availability-note">Links will be activated after publication.</p>
+
+                <!-- Sigil 7: Fire Alchemical Sign (Buy) -->
+                <svg class="ancient-sigil sigil-buy" viewBox="0 0 100 100">
+                    <path d="M50 15 L85 75 L15 75 Z" stroke-width="0.8" /> <!-- Triangle -->
+                </svg>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div style="position: relative; width: 100%; display: flex; justify-content: center; margin-bottom: 2rem;">
+            <!-- Sigil 3: Earth Alchemical Sign (Footer) -->
+            <svg class="ancient-sigil sigil-footer" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="35" stroke-width="0.8" />
+                <line x1="50" y1="15" x2="50" y2="85" stroke-width="0.8" />
+                <line x1="15" y1="50" x2="85" y2="50" stroke-width="0.8" />
+            </svg>
+        </div>
+        <p>&copy; 2025 Vedant J. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

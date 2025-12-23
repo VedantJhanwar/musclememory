@@ -1,0 +1,925 @@
+:root {
+    --bg-color: #050505;
+    --text-color: #ede0e0;
+    --accent-color: #FF0033;
+    /* Vibrant Electric Red */
+    --accent-dark: #cc0029;
+    --accent-glow: rgba(255, 0, 51, 0.6);
+    --secondary-bg: #0c0204;
+    /* Very subtle red-black tint */
+    --font-heading: 'Oswald', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+    --transition-speed: 0.4s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    height: 100%;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-body);
+    font-weight: 400;
+    line-height: 1.7;
+    overflow-x: hidden;
+    position: relative;
+    height: 100%;
+    overflow-y: scroll;
+    /* Required for scroll snap behavior on body sometimes, or just ensure html handles it */
+}
+
+/* Texture Overlay */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 999;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+}
+
+/* Sections */
+section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 6rem 2rem;
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    /* Forces stopping at each section */
+}
+
+section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.content-wrapper {
+    position: relative;
+    /* Fixed: For absolute children */
+    max-width: 900px;
+    width: 100%;
+    z-index: 2;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    /* Fixed: Added for absolute children like sigils */
+    background: radial-gradient(circle at center, #2e0009 0%, var(--bg-color) 70%);
+    /* Subtle red core */
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 40%, var(--bg-color) 95%);
+    z-index: 1;
+    mix-blend-mode: multiply;
+}
+
+.hero-content {
+    z-index: 2;
+    position: relative;
+}
+
+.presenter {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.book-title {
+    font-size: clamp(3.5rem, 12vw, 9rem);
+    background: linear-gradient(to bottom, #fff 40%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(255, 0, 51, 0.4);
+    /* Red Glow */
+    margin-bottom: 1rem;
+    line-height: 0.9;
+    animation: titlePulse 4s infinite alternate;
+}
+
+@keyframes titlePulse {
+    from {
+        text-shadow: 0 0 20px rgba(255, 0, 51, 0.2);
+    }
+
+    to {
+        text-shadow: 0 0 50px rgba(255, 0, 51, 0.7);
+    }
+}
+
+.accent-line-hero {
+    width: 120px;
+    height: 4px;
+    background-color: var(--accent-color);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 15px var(--accent-color);
+    /* Glowing Line */
+}
+
+.tagline {
+    font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+    color: #ccc;
+    margin-bottom: 4rem;
+    font-style: italic;
+    letter-spacing: 1px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Magnetic Button Experience */
+.magnetic-button {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    min-width: 220px;
+    background: transparent;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 0, 51, 0.5);
+    border-radius: 50px;
+    /* Pill shape */
+    cursor: pointer;
+    overflow: hidden;
+    /* transition: handled by JS for physics, expect color/border */
+    transition: border-color 0.3s, color 0.3s, box-shadow 0.3s;
+    z-index: 10;
+    box-shadow: 0 0 15px rgba(255, 0, 51, 0.1);
+}
+
+.magnetic-button .btn-text {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+    transition: color 0.3s;
+}
+
+.magnetic-button .btn-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--accent-color), #ff3355);
+    /* Vibrant Red Fill */
+    z-index: 1;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+    border-radius: 50px;
+}
+
+.magnetic-button:hover .btn-fill {
+    transform: scaleY(1);
+    transform-origin: top;
+}
+
+.magnetic-button:hover {
+    color: #fff;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 30px var(--accent-glow);
+}
+
+/* Red Accent Variation (Optional, if we want red fill instead) 
+   Currently sticking to high-contrast B&W for readability as requested 
+*/
+
+.cta-button {
+    display: none;
+}
+
+/* Ensure old class is hidden if still present */
+
+
+
+.scroll-container {
+    position: absolute;
+    bottom: 4vh;
+    /* Use vh to ensure it stays visible on different screens */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    z-index: 10;
+    opacity: 0.9;
+    cursor: pointer;
+    animation: fadeIn 2s 1s backwards;
+}
+
+.scroll-text {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    font-weight: 500;
+}
+
+.scroll-arrow {
+    color: var(--accent-color);
+    animation: bounceBottom 2s infinite;
+}
+
+.scroll-arrow svg {
+    width: 32px;
+    height: 32px;
+    filter: drop-shadow(0 0 5px var(--accent-glow));
+}
+
+/* Cover Section - The "Reveal" */
+.cover-section {
+    background: #000;
+    padding: 8rem 2rem;
+    perspective: 1000px;
+}
+
+.cover-container {
+    position: relative;
+}
+
+.book-cover-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 85vh;
+    border-radius: 2px;
+    filter: brightness(0.95) contrast(1.15);
+    /* Transition for smooth interaction */
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s ease, filter 0.6s ease;
+
+    /* Reset base state: no shadow, no transform */
+    box-shadow: none;
+    transform: none;
+}
+
+/* 1. HOVER-SPECIFIC STYLING (DESKTOP ONLY) */
+@media (hover: hover) and (pointer: fine) {
+    .cover-section:hover .book-cover-img {
+        transform: scale(1.03) translateY(-10px);
+        box-shadow: 0 30px 100px rgba(255, 0, 51, 0.4);
+        filter: brightness(1.1) contrast(1.2);
+    }
+}
+
+/* 2. TOUCH DEVICE BEHAVIOR (MOBILE ONLY) */
+@media (hover: none) and (pointer: coarse) {
+
+    .cover-section:active .book-cover-img,
+    .book-cover-img:focus {
+        transform: scale(1.03) translateY(-10px);
+        box-shadow: 0 30px 100px rgba(255, 0, 51, 0.4);
+        filter: brightness(1.1) contrast(1.2);
+    }
+}
+
+/* 4. FOCUS CLEANUP */
+.book-cover-img:focus {
+    outline: none;
+}
+
+/* About & Author - Alternating Backgrounds */
+.about-section {
+    position: relative;
+    /* Fixed: For children sigils */
+    background-color: var(--secondary-bg);
+    /* Uses the reddish tint */
+    border-top: 1px solid #1a0505;
+}
+
+.author-section {
+    background-color: var(--bg-color);
+    border-top: 1px solid #1a0505;
+}
+
+.content-wrapper h2 {
+    font-size: 3rem;
+    color: #fff;
+    margin-bottom: 3rem;
+    position: relative;
+    display: inline-block;
+}
+
+.content-wrapper h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--accent-color);
+    margin: 1rem auto 0;
+}
+
+.content-wrapper p {
+    margin-bottom: 2rem;
+    font-size: 1.15rem;
+    color: #bbb;
+    text-align: center;
+    /* Changed from justify for better modern readability on web */
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Author Specific */
+.author-note {
+    border-left: 2px solid var(--accent-color);
+    padding-left: 2rem;
+    text-align: left;
+    background: linear-gradient(to right, rgba(230, 0, 35, 0.05), transparent);
+    padding: 2rem;
+}
+
+.author-note p {
+    text-align: left;
+    margin-left: 0;
+}
+
+.signature {
+    margin-top: 1rem;
+    font-family: var(--font-heading);
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+/* Buy Links */
+.buy-section {
+    position: relative;
+    /* Fixed: For children sigils */
+    background: radial-gradient(circle at center, #1a0505 0%, #000 100%);
+    text-align: center;
+}
+
+.buy-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+}
+
+.store-btn {
+    padding: 1.2rem 3rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    letter-spacing: 2px;
+    cursor: not-allowed;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    min-width: 180px;
+}
+
+.store-btn:hover:not(:disabled) {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.availability-note {
+    font-size: 0.9rem;
+    color: #666;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Footer */
+footer {
+    position: relative;
+    /* Fixed: For sigil position */
+    padding: 3rem 2rem;
+    text-align: center;
+    background-color: #000;
+    color: #444;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    border-top: 1px solid #111;
+    scroll-snap-align: end;
+}
+
+/* Animations */
+@keyframes bounceBottom {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 0.9;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .book-title {
+        font-size: 4rem;
+    }
+
+    .buy-buttons {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .store-btn {
+        width: 100%;
+    }
+
+    .content-wrapper h2 {
+        font-size: 2.2rem;
+    }
+}
+
+/* Navigation Styles */
+.nav-toggle {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 1001;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: background 0.3s;
+}
+
+.nav-toggle:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.hamburger {
+    position: relative;
+    width: 30px;
+    height: 2px;
+    background: #fff;
+    transition: all 0.4s ease;
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    transition: all 0.4s ease;
+}
+
+.hamburger::before {
+    top: -8px;
+}
+
+.hamburger::after {
+    top: 8px;
+}
+
+/* Hover Animation for Hamburger */
+.nav-toggle:hover .hamburger {
+    background: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.nav-toggle:hover .hamburger::before,
+.nav-toggle:hover .hamburger::after {
+    background: var(--accent-color);
+    width: 36px;
+    /* Slightly widen on hover */
+    left: -3px;
+    /* Center with width change */
+}
+
+.nav-toggle:hover .hamburger::before {
+    top: -10px;
+    /* Slight separation */
+}
+
+.nav-toggle:hover .hamburger::after {
+    top: 10px;
+}
+
+/* Hamburger Active State (X shape) */
+.nav-active .hamburger {
+    background: transparent;
+    box-shadow: none;
+}
+
+.nav-active .hamburger::before {
+    transform: rotate(45deg);
+    top: 0;
+    width: 30px;
+    left: 0;
+    background: var(--accent-color);
+}
+
+.nav-active .hamburger::after {
+    transform: rotate(-45deg);
+    top: 0;
+    width: 30px;
+    left: 0;
+    background: var(--accent-color);
+}
+
+/* Navigation Overlay */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, visibility 0.5s;
+    visibility: hidden;
+}
+
+.nav-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+}
+
+.nav-content {
+    text-align: center;
+    width: 100%;
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.nav-item {
+    overflow: hidden;
+    /* For reveal animation */
+    /* opacity: 0; Removed initial opacity to handle via animation classes */
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.nav-overlay.active .nav-item {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Stagger delays for menu items */
+.nav-overlay.active .nav-item:nth-child(1) {
+    transition-delay: 0.1s;
+}
+
+.nav-overlay.active .nav-item:nth-child(2) {
+    transition-delay: 0.2s;
+}
+
+.nav-overlay.active .nav-item:nth-child(3) {
+    transition-delay: 0.3s;
+}
+
+.nav-overlay.active .nav-item:nth-child(4) {
+    transition-delay: 0.4s;
+}
+
+.nav-overlay.active .nav-item:nth-child(5) {
+    transition-delay: 0.5s;
+}
+
+
+.nav-link {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+    display: inline-block;
+}
+
+.nav-number {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--accent-color);
+    position: absolute;
+    top: 50%;
+    left: -40px;
+    /* Position to the left of text */
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    font-weight: 700;
+}
+
+.nav-link:hover {
+    color: #fff;
+}
+
+.nav-link:hover .nav-number {
+    opacity: 1;
+    left: -30px;
+}
+
+/* Link Underline Animation */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent-color);
+    transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Prevent body scroll when menu is open */
+body.nav-open {
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .nav-toggle {
+        top: 1.5rem;
+        right: 1.5rem;
+    }
+
+    .nav-number {
+        font-size: 2.5rem;
+    }
+}
+
+/* Mystery Background Layer */
+.mystery-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    mix-blend-mode: normal;
+    /* Changed from overlay for visibility on black */
+    opacity: 0.2;
+}
+
+.mystery-symbol {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.08);
+    /* Very faint */
+}
+
+/* Cipher Ring Positioning & Animation */
+.cipher-ring {
+    width: 80vh;
+    height: 80vh;
+    top: 50%;
+    left: 50%;
+    /* Center in viewport initially */
+    transform: translate(-50%, -50%);
+    animation: slowRotate 120s linear infinite;
+    opacity: 0.15;
+}
+
+/* Geometry Lines Positioning */
+.geometry-lines {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.05;
+}
+
+@keyframes slowRotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .cipher-ring {
+        width: 120vw;
+        height: 120vw;
+    }
+}
+
+/* Ancient Sigils (Da Vinci Style) - Refined Implementation */
+.ancient-sigil {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    z-index: 100;
+    /* Max priority */
+    opacity: 0.8;
+    /* High visibility in idle state as requested */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    cursor: crosshair;
+    overflow: visible;
+}
+
+.ancient-sigil path,
+.ancient-sigil circle,
+.ancient-sigil line,
+.ancient-sigil rect {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.6);
+    /* Increased from 0.4 for visibility */
+    stroke-width: 0.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    /* Preparation for the Trace Animation */
+    stroke-dasharray: 400;
+    stroke-dashoffset: 0;
+    /* Visible but faint in idle state */
+    transition: stroke 0.8s ease, stroke-dashoffset 0.1s;
+}
+
+/* Interaction: Proximity/Hover triggers the "Ritual" */
+.ancient-sigil:hover {
+    opacity: 0.8;
+}
+
+.ancient-sigil:hover path,
+.ancient-sigil:hover circle,
+.ancient-sigil:hover line,
+.ancient-sigil:hover rect {
+    animation: sigilRitual 6s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+        sigilRotate 25s linear infinite;
+    transform-origin: center;
+}
+
+/* The God Level Ritual Animation:
+   1. Red "discovery" trace
+   2. Fades to neutral white
+   3. Very slow intentional movement
+*/
+@keyframes sigilRitual {
+    0% {
+        stroke-dashoffset: 400;
+        stroke: var(--accent-color);
+        filter: drop-shadow(0 0 2px var(--accent-glow));
+    }
+
+    30% {
+        stroke-dashoffset: 0;
+        stroke: var(--accent-color);
+        filter: drop-shadow(0 0 8px var(--accent-glow));
+    }
+
+    60% {
+        stroke: var(--accent-color);
+        filter: drop-shadow(0 0 2px var(--accent-glow));
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        stroke: #fff;
+        /* Fades back to neutral as requested */
+        filter: drop-shadow(0 0 0px transparent);
+    }
+}
+
+@keyframes sigilRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Positioning - Sparse & Sparse Discoverable */
+.sigil-hero {
+    top: 25vh;
+    right: 5vw;
+    /* Moved closer to center */
+    transform: rotate(15deg);
+}
+
+.sigil-book {
+    top: 10px;
+    /* Moved inside the container */
+    left: 10px;
+    width: 90px;
+    height: 90px;
+    z-index: 20;
+}
+
+.sigil-footer {
+    top: 10px;
+    /* Moved inside footer boundary */
+    left: 2rem;
+}
+
+.sigil-about {
+    top: 50%;
+    right: 5vw;
+    /* Moved inside boundary */
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+.sigil-author {
+    top: 20px;
+    right: 30px;
+}
+
+.sigil-hero-left {
+    bottom: 20vh;
+    left: 10vw;
+    transform: rotate(-10deg);
+}
+
+.sigil-buy {
+    bottom: 20px;
+    right: 40px;
+    transform: rotate(5deg);
+}
+
+/* Very subtle floating for idle state if desired, but request asked for "Completely Still" */
+/* So we stick to still. */
