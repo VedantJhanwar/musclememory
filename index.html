@@ -14,10 +14,29 @@
 </head>
 
 <body>
-    <!-- Navigation -->
-    <button class="nav-toggle" aria-label="Toggle Navigation">
+
+    <!-- Glitch Corruption Intro -->
+    <div id="glitch-intro">
+        <canvas id="glitch-canvas"></canvas>
+        <div class="glitch-content">
+            <div class="glitch-title" id="glitch-title">
+                <span class="gt-layer gt-red">MUSCLE<br>MEMORY</span>
+                <span class="gt-layer gt-main">MUSCLE<br>MEMORY</span>
+                <span class="gt-layer gt-blue">MUSCLE<br>MEMORY</span>
+            </div>
+            <p class="glitch-by" id="glitch-by">by Vedant J.</p>
+        </div>
+    </div>
+
+    <!-- Floating Buy Button (appears after hero) -->
+    <a href="#buy-links" class="floating-buy-btn" id="floating-buy">
+        <span>Buy the Book</span>
+    </a>
+
+    <!-- Navigation — opens on hover -->
+    <div class="nav-toggle" aria-label="Toggle Navigation">
         <span class="hamburger"></span>
-    </button>
+    </div>
 
     <nav class="nav-overlay">
         <div class="nav-content">
@@ -27,7 +46,7 @@
                 </li>
                 <li class="nav-item"><a href="#about" class="nav-link">About the Story <span
                             class="nav-number">03</span></a></li>
-                <li class="nav-item"><a href="#author" class="nav-link">Author’s Note <span
+                <li class="nav-item"><a href="#author" class="nav-link">Author's Note <span
                             class="nav-number">04</span></a></li>
                 <li class="nav-item"><a href="#buy-links" class="nav-link">Where to Buy <span
                             class="nav-number">05</span></a></li>
@@ -37,14 +56,12 @@
 
     <!-- Mystery Background Layer -->
     <div class="mystery-layer">
-        <!-- Symbol 1: Cipher Ring (Rotating) -->
         <svg class="mystery-symbol cipher-ring" viewBox="0 0 500 500">
             <circle cx="250" cy="250" r="240" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="10 5"
                 opacity="0.3" />
             <circle cx="250" cy="250" r="200" fill="none" stroke="currentColor" stroke-width="1"
                 stroke-dasharray="40 10" />
             <path d="M250,10 L250,490 M10,250 L490,250" stroke="currentColor" stroke-width="1" opacity="0.2" />
-            <!-- Pseudo-text Ring -->
             <path id="ringPath" d="M 250, 250 m -220, 0 a 220,220 0 1,1 440,0 a 220,220 0 1,1 -440,0" fill="none" />
             <text fill="currentColor" opacity="0.4" font-size="14" letter-spacing="10">
                 <textPath href="#ringPath">
@@ -52,8 +69,6 @@
                 </textPath>
             </text>
         </svg>
-
-        <!-- Symbol 2: Geometric Lines -->
         <svg class="mystery-symbol geometry-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
             <line x1="0" y1="0" x2="100" y2="100" stroke="currentColor" stroke-width="0.5" opacity="0.2" />
             <line x1="100" y1="0" x2="0" y2="100" stroke="currentColor" stroke-width="0.5" opacity="0.2" />
@@ -68,7 +83,7 @@
             <div class="hero-content">
                 <p class="presenter">VEDANT J. PRESENTS</p>
                 <h1 class="book-title">MUSCLE MEMORY</h1>
-                <p class="tagline">“One body. Two histories. No truth left.”</p>
+                <p class="tagline">"One body. Two histories. No truth left."</p>
                 <div class="hero-actions">
                     <a href="#buy-links" class="magnetic-button" data-text-original="Buy the Book"
                         data-text-hover="Enter the Story">
@@ -86,48 +101,65 @@
                     </svg>
                 </div>
             </div>
-            <!-- Sigil 1: Mercury Alchemical Sign (Hero) -->
             <svg class="ancient-sigil sigil-hero" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="25" stroke-width="0.8" />
-                <path d="M35 25 Q50 10 65 25" stroke-width="0.8" /> <!-- Horns -->
-                <line x1="50" y1="75" x2="50" y2="95" stroke-width="0.8" /> <!-- Cross base -->
+                <path d="M35 25 Q50 10 65 25" stroke-width="0.8" />
+                <line x1="50" y1="75" x2="50" y2="95" stroke-width="0.8" />
                 <line x1="40" y1="85" x2="60" y2="85" stroke-width="0.8" />
                 <circle cx="50" cy="50" r="45" stroke-width="0.3" stroke-dasharray="2 4" opacity="0.4" />
             </svg>
-
-            <!-- Sigil 5: Air Alchemical Sign (Hero Left) -->
             <svg class="ancient-sigil sigil-hero-left" viewBox="0 0 100 100">
-                <path d="M50 15 L85 75 L15 75 Z" stroke-width="0.8" /> <!-- Triangle -->
-                <line x1="25" y1="35" x2="75" y2="35" stroke-width="0.8" /> <!-- Cross bar -->
+                <path d="M50 15 L85 75 L15 75 Z" stroke-width="0.8" />
+                <line x1="25" y1="35" x2="75" y2="35" stroke-width="0.8" />
             </svg>
         </section>
 
         <!-- Book Cover Section -->
         <section id="cover" class="cover-section">
-            <div class="cover-container">
-                <img src="book-cover.jpg" alt="Muscle Memory Book Cover" class="book-cover-img">
-
-                <!-- Sigil 2: Sulfur Alchemical Sign (Book) -->
-                <svg class="ancient-sigil sigil-book" viewBox="0 0 100 100">
-                    <path d="M50 15 L80 55 L20 55 Z" stroke-width="0.8" /> <!-- Triangle -->
-                    <line x1="50" y1="55" x2="50" y2="90" stroke-width="0.8" /> <!-- Cross base -->
-                    <line x1="35" y1="75" x2="65" y2="75" stroke-width="0.8" />
-                </svg>
+            <div class="cover-stage" id="cover-stage">
+                <div class="cover-expanded panel-left" id="panel-left">
+                    <div class="zoom-container" data-src="book-cover.jpg">
+                        <img src="book-cover.jpg" alt="Front Cover - Enlarged" class="cover-expanded-img">
+                        <div class="zoom-result"></div>
+                    </div>
+                    <p class="expanded-label">FRONT COVER — hover to zoom</p>
+                </div>
+                <div class="cover-container" id="cover-container">
+                    <div class="cover-tilt-wrapper" id="front-cover-wrapper">
+                        <img src="book-cover.jpg" alt="Muscle Memory - Front Cover" class="book-cover-img">
+                        <div class="cover-glow"></div>
+                    </div>
+                    <div class="cover-tilt-wrapper" id="back-cover-wrapper">
+                        <img src="book-back.jpg" alt="Muscle Memory - Back Cover" class="book-cover-img"
+                            id="back-cover-img">
+                        <div class="cover-glow"></div>
+                    </div>
+                </div>
+                <div class="cover-expanded panel-right" id="panel-right">
+                    <div class="zoom-container" data-src="book-back.jpg">
+                        <img src="book-back.jpg" alt="Back Cover - Enlarged" class="cover-expanded-img">
+                        <div class="zoom-result"></div>
+                    </div>
+                    <p class="expanded-label">BACK COVER — hover to zoom</p>
+                </div>
             </div>
+            <svg class="ancient-sigil sigil-book" viewBox="0 0 100 100">
+                <path d="M50 15 L80 55 L20 55 Z" stroke-width="0.8" />
+                <line x1="50" y1="55" x2="50" y2="90" stroke-width="0.8" />
+                <line x1="35" y1="75" x2="65" y2="75" stroke-width="0.8" />
+            </svg>
         </section>
 
         <!-- About Section -->
         <section id="about" class="about-section">
             <div class="content-wrapper" style="position: relative;">
-                <h2>The Story</h2>
-                <p>Memory is a liar. It reshapes the past to fit the person we’ve become. But what happens when the body
-                    remembers something the mind has wiped clean? When every scar tells a story that doesn't match the
-                    life you recall living.</p>
-                <p>In this gripping psychological thriller, the line between identity and delusion blurs until it
-                    vanishes completely. Truth isn't found in what you remember—it's hidden in what you can't forget.
-                </p>
-
-                <!-- Sigil 4: Salt Alchemical Sign (About) -->
+                <h2 class="reveal-text">The Story</h2>
+                <p class="reveal-text">Memory is a liar. It reshapes the past to fit the person we've become. But what
+                    happens when the body remembers something the mind has wiped clean? When every scar tells a story
+                    that doesn't match the life you recall living.</p>
+                <p class="reveal-text">In this gripping psychological thriller, the line between identity and delusion
+                    blurs until it vanishes completely. Truth isn't found in what you remember—it's hidden in what you
+                    can't forget.</p>
                 <svg class="ancient-sigil sigil-about" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="35" stroke-width="0.8" />
                     <line x1="15" y1="50" x2="85" y2="50" stroke-width="0.8" />
@@ -139,16 +171,14 @@
         <!-- Author Note Section -->
         <section id="author" class="author-section">
             <div class="content-wrapper">
-                <h2>A Note from the Author</h2>
+                <h2 class="reveal-text">A Note from the Author</h2>
                 <div class="author-note" style="position: relative;">
-                    <p>Writing this book was an exploration of the terrifying fragility of self. We assume we are the
-                        sum of our memories, but biological reality suggests otherwise. I wanted to explore that
-                        disconnect—the horror of discovering a stranger within your own skin.</p>
-                    <p class="signature">— Vedant J.</p>
-
-                    <!-- Sigil 6: Water Alchemical Sign (Author) -->
+                    <p class="reveal-text">Writing this book was an exploration of the terrifying fragility of self. We
+                        assume we are the sum of our memories, but biological reality suggests otherwise. I wanted to
+                        explore that disconnect—the horror of discovering a stranger within your own skin.</p>
+                    <p class="signature reveal-text">— Vedant J.</p>
                     <svg class="ancient-sigil sigil-author" viewBox="0 0 100 100">
-                        <path d="M50 85 L15 25 L85 25 Z" stroke-width="0.8" /> <!-- Downward Triangle -->
+                        <path d="M50 85 L15 25 L85 25 Z" stroke-width="0.8" />
                     </svg>
                 </div>
             </div>
@@ -159,15 +189,15 @@
             <div class="content-wrapper">
                 <h2>Where to Buy</h2>
                 <div class="buy-buttons">
-                    <button class="store-btn" disabled>Amazon</button>
-                    <button class="store-btn" disabled>Flipkart</button>
-                    <button class="store-btn" disabled>Kindle</button>
+                    <a href="https://www.amazon.in/dp/936976089X" target="_blank" rel="noopener noreferrer"
+                        class="store-btn">Amazon</a>
+                    <a href="https://www.flipkart.com/product/p/itme?pid=9789369760893" target="_blank"
+                        rel="noopener noreferrer" class="store-btn">Flipkart</a>
+                    <a href="https://www.amazon.in/dp/936976089X" target="_blank" rel="noopener noreferrer"
+                        class="store-btn">Kindle</a>
                 </div>
-                <p class="availability-note">Links will be activated after publication.</p>
-
-                <!-- Sigil 7: Fire Alchemical Sign (Buy) -->
                 <svg class="ancient-sigil sigil-buy" viewBox="0 0 100 100">
-                    <path d="M50 15 L85 75 L15 75 Z" stroke-width="0.8" /> <!-- Triangle -->
+                    <path d="M50 15 L85 75 L15 75 Z" stroke-width="0.8" />
                 </svg>
             </div>
         </section>
@@ -175,7 +205,6 @@
 
     <footer>
         <div style="position: relative; width: 100%; display: flex; justify-content: center; margin-bottom: 2rem;">
-            <!-- Sigil 3: Earth Alchemical Sign (Footer) -->
             <svg class="ancient-sigil sigil-footer" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="35" stroke-width="0.8" />
                 <line x1="50" y1="15" x2="50" y2="85" stroke-width="0.8" />

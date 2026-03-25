@@ -2,11 +2,9 @@
     --bg-color: #050505;
     --text-color: #ede0e0;
     --accent-color: #FF0033;
-    /* Vibrant Electric Red */
     --accent-dark: #cc0029;
     --accent-glow: rgba(255, 0, 51, 0.6);
     --secondary-bg: #0c0204;
-    /* Very subtle red-black tint */
     --font-heading: 'Oswald', sans-serif;
     --font-body: 'Montserrat', sans-serif;
     --transition-speed: 0.4s;
@@ -20,7 +18,6 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
     height: 100%;
 }
 
@@ -33,8 +30,7 @@ body {
     overflow-x: hidden;
     position: relative;
     height: 100%;
-    overflow-y: scroll;
-    /* Required for scroll snap behavior on body sometimes, or just ensure html handles it */
+    overflow-y: hidden;
 }
 
 /* Texture Overlay */
@@ -62,20 +58,18 @@ h3 {
 
 /* Sections */
 section {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 6rem 2rem;
+    padding: 4rem 2rem;
     position: relative;
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    /* Forces stopping at each section */
+    overflow: hidden;
 }
 
 section.visible {
@@ -83,9 +77,26 @@ section.visible {
     transform: translateY(0);
 }
 
+/* Red sweep line on section entry */
+section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    transform: scaleX(0);
+    transition: transform 1.2s 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+section.visible::after {
+    transform: scaleX(1);
+}
+
 .content-wrapper {
     position: relative;
-    /* Fixed: For absolute children */
     max-width: 900px;
     width: 100%;
     z-index: 2;
@@ -94,11 +105,16 @@ section.visible {
 /* Hero Section */
 .hero-section {
     position: relative;
-    /* Fixed: Added for absolute children like sigils */
-    background: radial-gradient(circle at center, #2e0009 0%, var(--bg-color) 70%);
-    /* Subtle red core */
+    background: radial-gradient(circle at 50% 50%, #2e0009 0%, var(--bg-color) 70%);
+    background-size: 100% 100%;
     text-align: center;
     overflow: hidden;
+    animation: heroBreathe 8s ease-in-out infinite;
+}
+
+@keyframes heroBreathe {
+    0%, 100% { background-size: 100% 100%; }
+    50% { background-size: 130% 130%; }
 }
 
 .hero-overlay {
@@ -133,7 +149,6 @@ section.visible {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 0 30px rgba(255, 0, 51, 0.4);
-    /* Red Glow */
     margin-bottom: 1rem;
     line-height: 0.9;
     animation: titlePulse 4s infinite alternate;
@@ -149,15 +164,6 @@ section.visible {
     }
 }
 
-.accent-line-hero {
-    width: 120px;
-    height: 4px;
-    background-color: var(--accent-color);
-    margin-bottom: 1.5rem;
-    box-shadow: 0 0 15px var(--accent-color);
-    /* Glowing Line */
-}
-
 .tagline {
     font-size: clamp(1.1rem, 2.5vw, 1.8rem);
     color: #ccc;
@@ -169,7 +175,7 @@ section.visible {
     margin-right: auto;
 }
 
-/* Magnetic Button Experience */
+/* Magnetic Button */
 .magnetic-button {
     position: relative;
     display: inline-flex;
@@ -186,10 +192,8 @@ section.visible {
     text-transform: uppercase;
     border: 1px solid rgba(255, 0, 51, 0.5);
     border-radius: 50px;
-    /* Pill shape */
     cursor: pointer;
     overflow: hidden;
-    /* transition: handled by JS for physics, expect color/border */
     transition: border-color 0.3s, color 0.3s, box-shadow 0.3s;
     z-index: 10;
     box-shadow: 0 0 15px rgba(255, 0, 51, 0.1);
@@ -209,7 +213,6 @@ section.visible {
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, var(--accent-color), #ff3355);
-    /* Vibrant Red Fill */
     z-index: 1;
     transform: scaleY(0);
     transform-origin: bottom;
@@ -228,22 +231,13 @@ section.visible {
     box-shadow: 0 0 30px var(--accent-glow);
 }
 
-/* Red Accent Variation (Optional, if we want red fill instead) 
-   Currently sticking to high-contrast B&W for readability as requested 
-*/
-
 .cta-button {
     display: none;
 }
 
-/* Ensure old class is hidden if still present */
-
-
-
 .scroll-container {
     position: absolute;
     bottom: 4vh;
-    /* Use vh to ensure it stays visible on different screens */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -275,62 +269,72 @@ section.visible {
     filter: drop-shadow(0 0 5px var(--accent-glow));
 }
 
-/* Cover Section - The "Reveal" */
+/* Cover Section */
 .cover-section {
     background: #000;
-    padding: 8rem 2rem;
+    padding: 4rem 2rem;
     perspective: 1000px;
 }
 
 .cover-container {
     position: relative;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.cover-tilt-wrapper {
+    position: relative;
+    display: inline-block;
+    perspective: 1200px;
+    transform-style: preserve-3d;
+    flex: 0 1 45%;
+    max-width: 45%;
 }
 
 .book-cover-img {
     max-width: 100%;
+    width: 100%;
     height: auto;
-    max-height: 85vh;
+    max-height: 70vh;
+    object-fit: contain;
     border-radius: 2px;
     filter: brightness(0.95) contrast(1.15);
-    /* Transition for smooth interaction */
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s ease, filter 0.6s ease;
-
-    /* Reset base state: no shadow, no transform */
     box-shadow: none;
     transform: none;
 }
 
-/* 1. HOVER-SPECIFIC STYLING (DESKTOP ONLY) */
-@media (hover: hover) and (pointer: fine) {
-    .cover-section:hover .book-cover-img {
-        transform: scale(1.03) translateY(-10px);
-        box-shadow: 0 30px 100px rgba(255, 0, 51, 0.4);
-        filter: brightness(1.1) contrast(1.2);
-    }
+.cover-tilt-wrapper .book-cover-img {
+    will-change: transform;
+    transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
 }
 
-/* 2. TOUCH DEVICE BEHAVIOR (MOBILE ONLY) */
-@media (hover: none) and (pointer: coarse) {
-
-    .cover-section:active .book-cover-img,
-    .book-cover-img:focus {
-        transform: scale(1.03) translateY(-10px);
-        box-shadow: 0 30px 100px rgba(255, 0, 51, 0.4);
-        filter: brightness(1.1) contrast(1.2);
-    }
+.cover-glow {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 60px;
+    background: radial-gradient(ellipse at center, rgba(255, 0, 51, 0.4) 0%, transparent 70%);
+    filter: blur(20px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: -1;
 }
 
-/* 4. FOCUS CLEANUP */
-.book-cover-img:focus {
-    outline: none;
+.cover-tilt-wrapper:hover .cover-glow {
+    opacity: 1;
 }
 
-/* About & Author - Alternating Backgrounds */
+/* About & Author */
 .about-section {
     position: relative;
-    /* Fixed: For children sigils */
     background-color: var(--secondary-bg);
-    /* Uses the reddish tint */
     border-top: 1px solid #1a0505;
 }
 
@@ -361,7 +365,6 @@ section.visible {
     font-size: 1.15rem;
     color: #bbb;
     text-align: center;
-    /* Changed from justify for better modern readability on web */
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
@@ -391,7 +394,6 @@ section.visible {
 /* Buy Links */
 .buy-section {
     position: relative;
-    /* Fixed: For children sigils */
     background: radial-gradient(circle at center, #1a0505 0%, #000 100%);
     text-align: center;
 }
@@ -412,28 +414,30 @@ section.visible {
     font-family: var(--font-heading);
     font-size: 1rem;
     letter-spacing: 2px;
-    cursor: not-allowed;
+    cursor: pointer;
     transition: all 0.3s;
     text-transform: uppercase;
     min-width: 180px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.store-btn:hover:not(:disabled) {
+a.store-btn:hover {
     background: var(--accent-color);
     border-color: var(--accent-color);
+    box-shadow: 0 0 20px var(--accent-glow);
 }
 
-.availability-note {
-    font-size: 0.9rem;
-    color: #666;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+.store-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
 }
 
 /* Footer */
 footer {
     position: relative;
-    /* Fixed: For sigil position */
     padding: 3rem 2rem;
     text-align: center;
     background-color: #000;
@@ -441,7 +445,8 @@ footer {
     font-size: 0.8rem;
     letter-spacing: 2px;
     border-top: 1px solid #111;
-    scroll-snap-align: end;
+    height: auto;
+    min-height: auto;
 }
 
 /* Animations */
@@ -492,9 +497,32 @@ footer {
     .content-wrapper h2 {
         font-size: 2.2rem;
     }
+
+    .cover-container {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .cover-tilt-wrapper {
+        max-width: 80%;
+        flex: 0 1 auto;
+    }
+
+    .book-cover-img {
+        max-height: 35vh;
+    }
+
+    .floating-buy-btn {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.75rem;
+    }
 }
 
-/* Navigation Styles */
+/* ==================================
+   NAVIGATION — HOVER TO OPEN
+   ================================== */
 .nav-toggle {
     position: fixed;
     top: 2rem;
@@ -510,10 +538,6 @@ footer {
     align-items: center;
     border-radius: 50%;
     transition: background 0.3s;
-}
-
-.nav-toggle:hover {
-    background: rgba(255, 255, 255, 0.05);
 }
 
 .hamburger {
@@ -542,8 +566,9 @@ footer {
     top: 8px;
 }
 
-/* Hover Animation for Hamburger */
-.nav-toggle:hover .hamburger {
+/* Hover triggers the nav open */
+.nav-toggle:hover .hamburger,
+.nav-active .hamburger {
     background: var(--accent-color);
     box-shadow: 0 0 10px var(--accent-glow);
 }
@@ -552,21 +577,18 @@ footer {
 .nav-toggle:hover .hamburger::after {
     background: var(--accent-color);
     width: 36px;
-    /* Slightly widen on hover */
     left: -3px;
-    /* Center with width change */
 }
 
 .nav-toggle:hover .hamburger::before {
     top: -10px;
-    /* Slight separation */
 }
 
 .nav-toggle:hover .hamburger::after {
     top: 10px;
 }
 
-/* Hamburger Active State (X shape) */
+/* X shape when active */
 .nav-active .hamburger {
     background: transparent;
     box-shadow: none;
@@ -627,8 +649,6 @@ footer {
 
 .nav-item {
     overflow: hidden;
-    /* For reveal animation */
-    /* opacity: 0; Removed initial opacity to handle via animation classes */
     transform: translateY(20px);
     opacity: 0;
     transition: all 0.5s ease;
@@ -639,7 +659,6 @@ footer {
     opacity: 1;
 }
 
-/* Stagger delays for menu items */
 .nav-overlay.active .nav-item:nth-child(1) {
     transition-delay: 0.1s;
 }
@@ -660,7 +679,6 @@ footer {
     transition-delay: 0.5s;
 }
 
-
 .nav-link {
     font-family: var(--font-heading);
     font-size: clamp(2rem, 5vw, 4rem);
@@ -679,7 +697,6 @@ footer {
     position: absolute;
     top: 50%;
     left: -40px;
-    /* Position to the left of text */
     transform: translateY(-50%);
     opacity: 0;
     transition: all 0.3s ease;
@@ -695,7 +712,6 @@ footer {
     left: -30px;
 }
 
-/* Link Underline Animation */
 .nav-link::after {
     content: '';
     position: absolute;
@@ -712,7 +728,6 @@ footer {
     width: 100%;
 }
 
-/* Prevent body scroll when menu is open */
 body.nav-open {
     overflow: hidden;
 }
@@ -739,29 +754,24 @@ body.nav-open {
     z-index: 0;
     overflow: hidden;
     mix-blend-mode: normal;
-    /* Changed from overlay for visibility on black */
     opacity: 0.2;
 }
 
 .mystery-symbol {
     position: absolute;
     color: rgba(255, 255, 255, 0.08);
-    /* Very faint */
 }
 
-/* Cipher Ring Positioning & Animation */
 .cipher-ring {
     width: 80vh;
     height: 80vh;
     top: 50%;
     left: 50%;
-    /* Center in viewport initially */
     transform: translate(-50%, -50%);
     animation: slowRotate 120s linear infinite;
     opacity: 0.15;
 }
 
-/* Geometry Lines Positioning */
 .geometry-lines {
     width: 100%;
     height: 100%;
@@ -787,15 +797,13 @@ body.nav-open {
     }
 }
 
-/* Ancient Sigils (Da Vinci Style) - Refined Implementation */
+/* Ancient Sigils */
 .ancient-sigil {
     position: absolute;
     width: 80px;
     height: 80px;
     z-index: 100;
-    /* Max priority */
     opacity: 0.8;
-    /* High visibility in idle state as requested */
     transition: opacity 0.5s ease, transform 0.5s ease;
     cursor: crosshair;
     overflow: visible;
@@ -807,19 +815,14 @@ body.nav-open {
 .ancient-sigil rect {
     fill: none;
     stroke: rgba(255, 255, 255, 0.6);
-    /* Increased from 0.4 for visibility */
     stroke-width: 0.8;
     stroke-linecap: round;
     stroke-linejoin: round;
-
-    /* Preparation for the Trace Animation */
     stroke-dasharray: 400;
     stroke-dashoffset: 0;
-    /* Visible but faint in idle state */
     transition: stroke 0.8s ease, stroke-dashoffset 0.1s;
 }
 
-/* Interaction: Proximity/Hover triggers the "Ritual" */
 .ancient-sigil:hover {
     opacity: 0.8;
 }
@@ -833,11 +836,6 @@ body.nav-open {
     transform-origin: center;
 }
 
-/* The God Level Ritual Animation:
-   1. Red "discovery" trace
-   2. Fades to neutral white
-   3. Very slow intentional movement
-*/
 @keyframes sigilRitual {
     0% {
         stroke-dashoffset: 400;
@@ -859,7 +857,6 @@ body.nav-open {
     100% {
         stroke-dashoffset: 0;
         stroke: #fff;
-        /* Fades back to neutral as requested */
         filter: drop-shadow(0 0 0px transparent);
     }
 }
@@ -874,17 +871,15 @@ body.nav-open {
     }
 }
 
-/* Positioning - Sparse & Sparse Discoverable */
+/* Sigil Positions */
 .sigil-hero {
     top: 25vh;
     right: 5vw;
-    /* Moved closer to center */
     transform: rotate(15deg);
 }
 
 .sigil-book {
     top: 10px;
-    /* Moved inside the container */
     left: 10px;
     width: 90px;
     height: 90px;
@@ -893,14 +888,12 @@ body.nav-open {
 
 .sigil-footer {
     top: 10px;
-    /* Moved inside footer boundary */
     left: 2rem;
 }
 
 .sigil-about {
     top: 50%;
     right: 5vw;
-    /* Moved inside boundary */
     transform: translateY(-50%) rotate(-90deg);
 }
 
@@ -921,5 +914,722 @@ body.nav-open {
     transform: rotate(5deg);
 }
 
-/* Very subtle floating for idle state if desired, but request asked for "Completely Still" */
-/* So we stick to still. */
+/* ==================================
+   LOADING SCREEN — CINEMATIC INTRO
+   ================================== */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #2e0009 0%, var(--bg-color) 70%);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+}
+
+#loading-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* VHS Scanlines */
+.loader-scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    background: repeating-linear-gradient(to bottom,
+            transparent 0px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.15) 2px,
+            rgba(0, 0, 0, 0.15) 4px);
+    pointer-events: none;
+    z-index: 2;
+    animation: scanScroll 8s linear infinite;
+    opacity: 0.5;
+}
+
+@keyframes scanScroll {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+
+/* Content */
+.loader-content {
+    text-align: center;
+    position: relative;
+    z-index: 3;
+    transition: opacity 0.5s ease;
+}
+
+.loader-content.dim {
+    opacity: 0;
+}
+
+.loader-presenter {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: loaderFadeIn 0.6s 0.8s ease forwards;
+    font-family: var(--font-body);
+}
+
+.loader-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3.5rem, 12vw, 9rem);
+    background: linear-gradient(to bottom, #fff 40%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    position: relative;
+    opacity: 0;
+    line-height: 0.9;
+    margin-bottom: 1rem;
+    animation: loaderTitleIn 1s 1.0s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* Glitch pseudo-elements */
+.loader-title::before,
+.loader-title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.loader-title::before {
+    color: var(--accent-color);
+    -webkit-text-fill-color: var(--accent-color);
+    animation: glitch1 0.3s 1.5s linear 4;
+    clip-path: inset(20% 0 40% 0);
+}
+
+.loader-title::after {
+    color: #00ffff;
+    -webkit-text-fill-color: #00ffff;
+    animation: glitch2 0.3s 1.6s linear 4;
+    clip-path: inset(60% 0 10% 0);
+}
+
+@keyframes glitch1 {
+    0% {
+        opacity: 0.8;
+        transform: translate(-4px, -2px) skewX(-2deg);
+    }
+
+    25% {
+        opacity: 0.6;
+        transform: translate(4px, 1px) skewX(1deg);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: translate(-2px, 3px) skewX(-1deg);
+    }
+
+    75% {
+        opacity: 0.4;
+        transform: translate(3px, -2px) skewX(2deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(0) skewX(0);
+    }
+}
+
+@keyframes glitch2 {
+    0% {
+        opacity: 0.6;
+        transform: translate(3px, 1px) skewX(1deg);
+    }
+
+    25% {
+        opacity: 0.4;
+        transform: translate(-4px, -2px) skewX(-2deg);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: translate(2px, -3px) skewX(1deg);
+    }
+
+    75% {
+        opacity: 0.3;
+        transform: translate(-3px, 2px) skewX(-1deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(0) skewX(0);
+    }
+}
+
+.loader-tagline {
+    font-family: var(--font-body);
+    font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+    color: #ccc;
+    font-style: italic;
+    letter-spacing: 1px;
+    opacity: 0;
+    animation: loaderFadeIn 0.8s 1.8s ease forwards;
+}
+
+.loader-line {
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    margin: 1.5rem auto;
+    animation: lineExpand 1.2s 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.loader-line-bottom {
+    animation-delay: 2.0s;
+}
+
+
+@keyframes loaderTitleIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+        filter: blur(10px);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateY(-3px) scale(1.01);
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes loaderFadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0.9;
+    }
+}
+
+@keyframes lineExpand {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: min(80%, 400px);
+    }
+}
+
+body.loading {
+    overflow: hidden;
+}
+
+/* ==================================
+   HERO ENTRANCE ANIMATIONS
+   Staggered fade-up as loader dissolves.
+   ================================== */
+body.loading .presenter,
+body.loading .book-title,
+body.loading .tagline,
+body.loading .hero-actions,
+body.loading .scroll-container {
+    opacity: 0 !important;
+    transform: translateY(25px) !important;
+}
+
+.hero-enter .presenter {
+    animation: presenterReveal 1s 0s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes presenterReveal {
+    0% {
+        opacity: 0;
+        letter-spacing: 15px;
+        transform: translateY(10px);
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 0.8;
+        letter-spacing: 4px;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+.hero-enter .book-title {
+    animation: titleReveal 1.4s 0.2s cubic-bezier(0.23, 1, 0.32, 1) both, titlePulse 4s 2s infinite alternate;
+}
+
+@keyframes titleReveal {
+    0% {
+        opacity: 0;
+        clip-path: inset(100% 0 0 0);
+        transform: translateY(40px);
+    }
+    40% {
+        opacity: 1;
+    }
+    70% {
+        clip-path: inset(0);
+        transform: translateY(-5px);
+    }
+    100% {
+        clip-path: inset(0);
+        transform: translateY(0);
+    }
+}
+
+.hero-enter .tagline {
+    animation: heroFadeUp 0.7s 0.4s ease both;
+}
+
+/* Typewriter override — when JS typewriter is active */
+.hero-enter .tagline.typewriter-active {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+.tagline.typewriter-active::after {
+    content: '|';
+    color: var(--accent-color);
+    font-style: normal;
+    margin-left: 2px;
+    animation: cursorBlink 0.7s step-end infinite;
+}
+
+.tagline.typewriter-done::after {
+    display: none;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.hero-enter .hero-actions {
+    animation: heroFadeUp 0.7s 0.55s ease both;
+}
+
+.hero-enter .scroll-container {
+    animation: heroFadeUp 0.5s 0.7s ease both, scrollPulse 3s 3s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+@keyframes heroFadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(25px);
+        filter: blur(4px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+/* ==================================
+   FLOATING BUY BUTTON
+   ================================== */
+.floating-buy-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 900;
+    padding: 1rem 2rem;
+    background: var(--accent-color);
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border-radius: 50px;
+    box-shadow: 0 4px 30px rgba(255, 0, 51, 0.4);
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.4s, transform 0.4s, box-shadow 0.3s, background 0.3s;
+}
+
+.floating-buy-btn.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.floating-buy-btn:hover {
+    box-shadow: 0 6px 40px rgba(255, 0, 51, 0.6);
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+}
+
+/* ==================================
+   SCROLL TEXT REVEALS
+   ================================== */
+.reveal-text {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(4px);
+    transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+        transform 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+        filter 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.reveal-text.revealed {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+h2.reveal-text {
+    position: relative;
+}
+
+h2.reveal-text::after {
+    width: 0;
+    transition: width 0.6s 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+h2.reveal-text.revealed::after {
+    width: 60px;
+}
+
+/* ==================================
+   SLIDE-TO-READ COVERS (DUAL)
+   ================================== */
+.cover-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Cover container transitions */
+.cover-container {
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+        flex 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    flex: 1;
+}
+
+.cover-stage .cover-tilt-wrapper {
+    transition: max-width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cover-stage .book-cover-img {
+    transition: max-height 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+        transform 0.15s ease-out,
+        box-shadow 0.3s ease;
+}
+
+/* --- EXPAND RIGHT (back cover hovered) --- */
+.cover-stage.expand-right .cover-container {
+    transform: translateX(-20%);
+    flex: 0 0 40%;
+}
+
+.cover-stage.expand-right .panel-right {
+    flex: 0 0 55%;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* --- EXPAND LEFT (front cover hovered) --- */
+.cover-stage.expand-left .cover-container {
+    transform: translateX(20%);
+    flex: 0 0 40%;
+}
+
+.cover-stage.expand-left .panel-left {
+    flex: 0 0 55%;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Shrink covers when either is expanded */
+.cover-stage.expand-right .cover-tilt-wrapper,
+.cover-stage.expand-left .cover-tilt-wrapper {
+    max-width: 48%;
+}
+
+.cover-stage.expand-right .book-cover-img,
+.cover-stage.expand-left .book-cover-img {
+    max-height: 50vh;
+}
+
+/* Expanded panels — hidden by default */
+.cover-expanded {
+    flex: 0 0 0%;
+    max-height: 90vh;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: flex 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+        opacity 0.4s 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+}
+
+/* Zoom container wraps the enlarged image */
+.zoom-container {
+    position: relative;
+    display: inline-block;
+    cursor: crosshair;
+    overflow: hidden;
+    border-radius: 6px;
+    background: transparent;
+}
+
+.cover-expanded-img {
+    max-height: 80vh;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 6px;
+    box-shadow: none;
+    background: transparent;
+    filter: brightness(1.05) contrast(1.1);
+    transition: opacity 0.2s;
+}
+
+/* When zooming, dim the normal image */
+.zoom-container.zooming .cover-expanded-img {
+    opacity: 0.3;
+}
+
+/* Zoom result overlay — shows magnified area */
+.zoom-result {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+    border-radius: 6px;
+    transition: opacity 0.15s;
+}
+
+.zoom-container.zooming .zoom-result {
+    opacity: 1;
+}
+
+.expanded-label {
+    margin-top: 0.8rem;
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--accent-color);
+    opacity: 0.6;
+}
+
+/* Hover hints on both covers */
+#front-cover-wrapper,
+#back-cover-wrapper {
+    cursor: pointer;
+    position: relative;
+}
+
+#front-cover-wrapper::after,
+#back-cover-wrapper::after {
+    content: 'CLICK TO READ';
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: #fff;
+    background: rgba(255, 0, 51, 0.6);
+    padding: 0.3rem 0.7rem;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+#front-cover-wrapper:hover::after,
+#back-cover-wrapper:hover::after {
+    opacity: 1;
+}
+
+/* Hide hints when expanded */
+.cover-stage.expand-left #front-cover-wrapper::after,
+.cover-stage.expand-right #back-cover-wrapper::after {
+    opacity: 0 !important;
+}
+
+/* Hide on small screens */
+@media (max-width: 1024px) {
+    .cover-expanded {
+        display: none;
+    }
+
+    .cover-stage.expand-left .cover-container,
+    .cover-stage.expand-right .cover-container {
+        transform: none;
+        flex: 1;
+    }
+}
+
+/* ==================================
+   GLITCH CORRUPTION INTRO
+   ================================== */
+#glitch-intro {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#glitch-intro.dissolve {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#glitch-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.glitch-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.glitch-title {
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+    transition: opacity 0.05s;
+}
+
+.gt-layer {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: clamp(3rem, 9vw, 8rem);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    line-height: 0.95;
+    text-align: center;
+}
+
+/* The ghost layers — red and blue chromatic offsets */
+.gt-red {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: rgba(255, 0, 51, 0.7);
+    transform: translate(-4px, 0);
+    clip-path: inset(30% 0 40% 0);
+}
+
+.gt-blue {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: rgba(100, 180, 255, 0.5);
+    transform: translate(4px, 0);
+    clip-path: inset(55% 0 10% 0);
+}
+
+.gt-main {
+    position: relative;
+    color: #fff;
+}
+
+/* Active glitch — random cuts */
+.glitch-title.active-glitch .gt-main {
+    clip-path: inset(20% 0 50% 0);
+    transform: translateX(-6px);
+}
+
+.glitch-title.active-glitch .gt-red {
+    clip-path: inset(0% 0 65% 0);
+    transform: translate(10px, -3px);
+}
+
+.glitch-title.active-glitch .gt-blue {
+    clip-path: inset(60% 0 0% 0);
+    transform: translate(-8px, 4px);
+}
+
+/* Settled — clean, solid, glowing */
+.glitch-title.settled .gt-main {
+    clip-path: none;
+    transform: none;
+    text-shadow: 0 0 30px rgba(255, 0, 51, 0.5), 0 0 80px rgba(255, 0, 51, 0.2);
+    transition: clip-path 0.15s, transform 0.15s, text-shadow 0.4s;
+}
+
+.glitch-title.settled .gt-red,
+.glitch-title.settled .gt-blue {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.glitch-by {
+    margin-top: 1.5rem;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    letter-spacing: 5px;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
